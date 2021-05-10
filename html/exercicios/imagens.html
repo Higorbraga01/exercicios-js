@@ -1,112 +1,92 @@
-<!-- <div class="wm-slider">
-  <p class="showSlide fade">
-    <img
-      src="http://files.cod3r.com.br/curso-web/imagem1.jpg"
-      alt="Muro da Cidade"
-      width="513"
-      height="342"
-      title="Mura da Cidade por Tarso Bessa"
-    />
+<div wm-slider>
+  <p>
+    <img src="http://files.cod3r.com.br/curso-web/imagem1.jpg" alt="Muro da Cidade" width="513" height="342"
+      title="Mura da Cidade por Tarso Bessa" />
   </p>
 
-  <p class="showSlide fade">
-    <img
-      src="http://files.cod3r.com.br/curso-web/imagem2.gif"
-      alt="Intro Cod3r"
-      height="342"
-    />
+  <p>
+    <img src="http://files.cod3r.com.br/curso-web/imagem2.gif" alt="Intro Cod3r" height="342" />
   </p>
 
-  <p class="showSlide fade">
-    <img
-      src="http://files.cod3r.com.br/curso-web/imagem3.png"
-      alt="Rio de janeiro"
-      height="342"
-    />
+  <p>
+    <img src="http://files.cod3r.com.br/curso-web/imagem3.png" alt="Rio de janeiro" height="342" />
   </p>
 
-  <p class="showSlide fade">
-    <img
-      src="http://files.cod3r.com.br/curso-web/avatar.jpg"
-      alt="Avatar"
-      height="50"
-      align="left"
-    />
+  <p>
+    <img src="http://files.cod3r.com.br/curso-web/avatar.jpg" alt="Avatar" height="50" align="left" />
     Texto sdsdfsdfsad dsdsfsdsffs dsd sdfsdsdsdsdfsdsdsf sdfsdsdsdsdfsdsdsf
   </p>
 
   <p class="cidade"></p>
 
-  <p class="showSlide fade">
+  <p>
     <picture>
-      <source
-        srcset="http://files.cod3r.com.br/curso-web/logo-larga.png"
-        media="(min-width: 600px)"
-      />
-      <img
-        src="http://files.cod3r.com.br/curso-web/logo-estreita.png"
-        alt="Logo"
-      />
+      <source srcset="http://files.cod3r.com.br/curso-web/logo-larga.png" media="(min-width: 600px)" />
+      <img src="http://files.cod3r.com.br/curso-web/logo-estreita.png" alt="Logo" />
     </picture>
   </p>
-</div> -->
-
-<div class="slidercontainer">
-  <div class="showSlide fade">
-    <img src="http://files.cod3r.com.br/curso-web/imagem1.jpg" />
-    <div class="content">Lorem ipsum dolor sit amet</div>
-  </div>
-  <div class="showSlide fade">
-    <img src="http://files.cod3r.com.br/curso-web/imagem2.gif" />
-    <div class="content">Lorem ipsum dolor sit amet</div>
-  </div>
-
-  <div class="showSlide fade">
-    <img src="http://files.cod3r.com.br/curso-web/imagem3.png" />
-    <div class="content">Lorem ipsum dolor sit amet</div>
-  </div>
-  <div class="showSlide fade">
-    <img src="http://files.cod3r.com.br/curso-web/avatar.jpg" />
-    <div class="content">Lorem ipsum dolor sit amet</div>
-  </div>
-  <!-- Navigation arrows -->
-  <a class="left" onclick="nextSlide(-1)">❮</a>
-  <a class="right" onclick="nextSlide(1)">❯</a>
 </div>
 
-<script type="text/javascript">
-  var slide_index = 1;
-  displaySlides(slide_index);
-  function nextSlide(n) {
-    displaySlides((slide_index += n));
-  }
-  function currentSlide(n) {
-    displaySlides((slide_index = n));
-  }
-  function displaySlides(n) {
-    var i;
-    var slides = document.getElementsByClassName("showSlide");
-    if (n > slides.length) {
-      slide_index = 1;
+<script>
+  function mover(elemento, inicio, fim, passo, callback) {
+    const novoInicio = inicio - passo;
+    if (novoInicio >= fim) {
+      elemento.style.left = novoInicio + 'px';
+      setTimeout(() => mover(elemento, novoInicio, fim, passo, callback), 7);
+    } else {
+      callback();
     }
-    if (n < 1) {
-      slide_index = slides.length;
+
+    // const p = document.querySelector('[wm-slider] > p')
+    // p.style.display = 'block'
+    // mover(p, 1500, -520, 5, () => {
+    //   console.log('terminou')
+    // })
+
+    function slider() {
+      const elementos = document.querySelectorAll('[wm-slider] > p')
+      const slides = Array.from(elementos)
+      console.log(slides)
+
+      exibirSlide(slides, slides[0])
     }
-    for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
+
+    function exibirSlide(slides, slide) {
+      slide.style.display = 'block'
+      const inicio = innerWidth
+      const fim = -slide.clientWidth
+
+      slide.style.left = `${inicio}px`
+      mover(slide, inicio, fim, 5, () => {
+        slide.style.display = 'none'
+        exibirSlide(slides, getProximo(slides, slide))
+      })
     }
-    slides[slide_index - 1].style.display = "block";
+
+    function getProximo(lista, atual) {
+      const i = lista.indexOf(atual) + 1
+      return i < lista.length ? lista[i] : lista[0]
+    }
+
+    slider()
   }
 </script>
 
-<!-- <style>
+<style>
+  p {
+    position: absolute;
+    display: none;
+  }
+
   .circular {
     width: 513px;
     background-color: #444;
   }
+
   .texto {
     width: 400px;
   }
+
   .texto img {
     margin-right: 10px;
   }
@@ -114,85 +94,9 @@
   .cidade {
     width: 513px;
     height: 342px;
-    background-image: url("http://files.cod3r.com.br/curso-web/imagem4.jpg");
+    background-image: url('http://files.cod3r.com.br/curso-web/imagem4.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 200%;
-  }
-</style> -->
-
-<style type="text/css">
-  body {
-    margin: 0;
-    background: #e6e6e6;
-  }
-  .showSlide {
-    display: none;
-  }
-  .showSlide img {
-    width: 100%;
-  }
-  .slidercontainer {
-    max-width: 513px;
-    position: relative;
-    margin: auto;
-  }
-  .left,
-  .right {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    padding: 16px;
-    margin-top: -22px;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
-  }
-  .right {
-    right: 0;
-    border-radius: 3px 0 0 3px;
-  }
-  .left:hover,
-  .right:hover {
-    background-color: rgba(115, 115, 115, 0.8);
-  }
-  .content {
-    color: #eff5d4;
-    font-size: 30px;
-    padding: 8px 12px;
-    position: absolute;
-    top: 10px;
-    width: 100%;
-    text-align: center;
-  }
-  .active {
-    background-color: #717171;
-  }
-  /* Fading animation */
-  .fade {
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 1.5s;
-    animation-name: fade;
-    animation-duration: 1.5s;
-  }
-  @-webkit-keyframes fade {
-    from {
-      opacity: 0.4;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes fade {
-    from {
-      opacity: 0.4;
-    }
-    to {
-      opacity: 1;
-    }
   }
 </style>
